@@ -1,0 +1,698 @@
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Наша история</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+   --cream:#f3ecdf;
+  --beige:#e9dfcc;
+  --ink:#23120a;
+  --ink-soft:rgba(35,18,10,.6);
+  --red:#b3242b;
+  --u:60px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Manrope',-apple-system,sans-serif;
+  font-weight:400;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--ink);color:var(--cream)}
+.serif{font-family:'Playfair Display',serif}
+
+/* ---------- fixed fireflies canvas ---------- */
+#fireflies{
+  position:fixed;inset:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  z-index:1;
+}
+.page{position:relative;z-index:2}
+
+/* ---------- reveal ---------- */
+.rv{
+  opacity:0;
+  transform:translateY(46px);
+  transition:opacity 1s cubic-bezier(.22,.61,.36,1),transform 1s cubic-bezier(.22,.61,.36,1);
+  will-change:opacity,transform;
+}
+.rv.in{opacity:1;transform:translateY(0)}
+.rv-d1{transition-delay:.12s}
+.rv-d2{transition-delay:.24s}
+.rv-d3{transition-delay:.36s}
+
+/* ---------- hero ---------- */
+.hero{
+  min-height:100svh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:0 24px;
+  position:relative;
+}
+.hero-eyebrow{
+  font-size:11px;letter-spacing:.42em;text-transform:uppercase;
+  color:var(--ink-soft);margin-bottom:34px;font-weight:500;
+}
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-weight:500;
+  font-size:clamp(52px,11vw,128px);
+  line-height:1.02;
+  letter-spacing:-.015em;
+}
+.hero-title em{font-style:italic;font-weight:400}
+.hero-sub{
+  margin-top:38px;
+  font-size:15px;line-height:1.8;
+  color:var(--ink-soft);
+  max-width:420px;
+}
+.hero-sub .dot{color:var(--red)}
+.scroll-hint{
+  position:absolute;bottom:44px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  font-size:10px;letter-spacing:.38em;text-transform:uppercase;color:var(--ink-soft);
+}
+.scroll-hint .line{
+  width:1px;height:56px;background:var(--ink);opacity:.35;
+  transform-origin:top;animation:hint 2.4s cubic-bezier(.65,0,.35,1) infinite;
+}
+@keyframes hint{0%{transform:scaleY(0)}45%{transform:scaleY(1)}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* stagger text */
+.st span{display:inline-block;opacity:0;transform:translateY(.35em);animation:stIn .9s cubic-bezier(.22,.61,.36,1) forwards}
+@keyframes stIn{to{opacity:1;transform:translateY(0)}}
+
+/* ---------- intro letter ---------- */
+.intro{
+  max-width:600px;margin:0 auto;
+  padding:calc(var(--u)*2) 28px;
+  text-align:center;
+}
+.intro p{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(19px,2.4vw,24px);
+  line-height:1.75;font-weight:400;
+}
+.intro p+p{margin-top:1.4em}
+.intro .sig{
+  margin-top:44px;font-family:'Playfair Display',serif;
+  font-style:italic;font-size:18px;color:var(--ink-soft);
+}
+.rule{
+  width:56px;height:1px;background:var(--ink);opacity:.3;
+  margin:calc(var(--u)*1.2) auto 0;
+}
+
+/* ---------- chapters ---------- */
+.chapters{
+  position:relative;
+  max-width:1180px;margin:0 auto;
+  padding:var(--u) 28px calc(var(--u)*2);
+}
+.chapters::before{
+  content:'';position:absolute;left:50%;top:0;bottom:0;
+  width:1px;background:linear-gradient(to bottom,transparent,rgba(240,237,231,.22) 8%,rgba(240,237,231,.22) 92%,transparent);
+}
+.chapter{
+  position:relative;
+  display:flex;align-items:center;
+  margin-bottom:calc(var(--u)*3);
+}
+.chapter:last-child{margin-bottom:0}
+.ch-node{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:11px;height:11px;border-radius:50%;
+  background:var(--cream);border:1.5px solid var(--ink);
+  z-index:3;
+}
+.ch-node::after{
+  content:'';position:absolute;inset:2.5px;border-radius:50%;background:var(--red);
+}
+.ch-side{flex:1;min-width:0}
+.ch-text{padding:0 64px}
+.chapter.r .ch-text{order:2;text-align:right}
+.ch-num{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(64px,7vw,104px);
+  line-height:1;font-weight:400;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(240,237,231,.35);
+  display:block;margin-bottom:18px;
+}
+.ch-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,3.4vw,42px);
+  font-weight:500;line-height:1.15;margin-bottom:20px;
+}
+.ch-title em{font-style:italic;font-weight:400}
+.ch-body{
+  font-size:15px;line-height:1.85;color:var(--ink-soft);
+  max-width:400px;
+}
+.chapter.r .ch-body{margin-left:auto}
+.ch-photo{
+  padding:0 64px;
+  display:flex;justify-content:center;
+}
+.frame{
+  position:relative;
+  width:min(100%,380px);
+  overflow:hidden;
+}
+.frame img{
+  display:block;width:100%;height:auto;
+  aspect-ratio:4/5;object-fit:cover;
+  transform:scale(1.12);
+  transition:transform 1.4s cubic-bezier(.22,.61,.36,1);
+  will-change:transform;
+}
+.frame.wide img{aspect-ratio:4/3}
+.frame::after{
+  content:'';position:absolute;inset:0;
+  box-shadow:inset 0 0 0 1px rgba(240,237,231,.14);
+  pointer-events:none;
+}
+.ch-cap{
+  margin-top:14px;
+  font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--ink-soft);text-align:center;
+}
+.duo{display:flex;gap:14px;width:min(100%,460px)}
+.duo .frame{width:50%}
+.duo .frame img{aspect-ratio:3/4}
+
+/* ---------- interlude quote ---------- */
+.interlude{
+  background:var(--beige);
+  padding:calc(var(--u)*2.2) 28px;
+  text-align:center;
+  margin:calc(var(--u)*1.5) 0;
+}
+.interlude blockquote{
+  font-family:'Playfair Display',serif;
+  font-style:italic;font-weight:400;
+  font-size:clamp(24px,3.6vw,40px);
+  line-height:1.5;max-width:820px;margin:0 auto;
+}
+.interlude .who{
+  margin-top:30px;font-size:10.5px;letter-spacing:.38em;
+  text-transform:uppercase;color:var(--ink-soft);
+}
+
+/* ---------- game ---------- */
+.game-sec{
+  padding:calc(var(--u)*1.6) 28px calc(var(--u)*2);
+  text-align:center;
+  max-width:1180px;margin:0 auto;
+}
+.game-eyebrow{
+  font-size:11px;letter-spacing:.42em;text-transform:uppercase;
+  color:var(--ink-soft);margin-bottom:22px;font-weight:500;
+}
+.game-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(34px,5vw,58px);font-weight:500;line-height:1.1;
+}
+.game-title em{font-style:italic;font-weight:400}
+.game-sub{
+  margin:22px auto 0;font-size:15px;line-height:1.8;
+  color:var(--ink-soft);max-width:440px;
+}
+.game-hud{
+  display:flex;justify-content:center;gap:44px;
+  margin:40px 0 22px;
+  font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-soft);
+}
+.game-hud b{
+  display:block;font-family:'Playfair Display',serif;
+  font-size:30px;font-weight:500;color:var(--ink);
+  letter-spacing:0;margin-top:6px;
+}
+#gameBoard{
+  position:relative;
+  width:100%;max-width:860px;height:min(66svh,560px);
+  margin:0 auto;
+  border:1px solid rgba(240,237,231,.18);
+  background:var(--beige);
+  overflow:hidden;
+  cursor:crosshair;
+  touch-action:manipulation;
+}
+#gameCanvas{position:absolute;inset:0;width:100%;height:100%}
+.game-start{
+  position:absolute;inset:0;z-index:5;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  background:rgba(25,26,31,.86);
+  backdrop-filter:blur(6px);
+  transition:opacity .6s ease;
+}
+.game-start.hide{opacity:0;pointer-events:none}
+.btn{
+  font-family:'Manrope',sans-serif;
+  font-size:12px;letter-spacing:.3em;text-transform:uppercase;font-weight:600;
+  color:var(--cream);background:var(--ink);
+  border:1px solid var(--ink);
+  padding:18px 44px;cursor:pointer;
+  transition:background .35s ease,color .35s ease;
+}
+.btn:hover{background:transparent;color:var(--ink)}
+.game-tip{font-size:13px;color:var(--ink-soft);font-style:italic;font-family:'Playfair Display',serif;font-size:16px}
+
+/* ---------- finale ---------- */
+.finale{
+  background:var(--cream);color:var(--ink);
+  padding:calc(var(--u)*2.4) 28px calc(var(--u)*2.2);
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.finale .f-eyebrow{
+  font-size:11px;letter-spacing:.42em;text-transform:uppercase;
+  color:rgba(240,237,231,.62);margin-bottom:34px;font-weight:500;
+}
+.finale h2{
+  font-family:'Playfair Display',serif;font-weight:500;
+  font-size:clamp(36px,6vw,72px);line-height:1.12;letter-spacing:-.01em;
+}
+.finale h2 em{font-style:italic;font-weight:400}
+.finale .f-body{
+  max-width:560px;margin:44px auto 0;
+  font-size:15.5px;line-height:2;color:rgba(240,237,231,.82);
+}
+.finale .f-body p+p{margin-top:1.5em}
+.finale .f-photo{
+  margin:56px auto 0;width:min(100%,440px);
+  overflow:hidden;position:relative;
+}
+.finale .f-photo img{display:block;width:100%;height:auto;filter:grayscale(1) contrast(1.05)}
+.finale .f-photo::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(252,252,248,.2)}
+.finale .f-sig{
+  margin-top:56px;
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(20px,2.6vw,26px);color:rgba(240,237,231,.92);
+}
+.finale .f-heart{
+  color:var(--red);font-size:22px;display:inline-block;
+  animation:beat 1.6s ease-in-out infinite;margin-top:26px;
+}
+@keyframes beat{0%,100%{transform:scale(1)}12%{transform:scale(1.22)}24%{transform:scale(1)}}
+.finale .rv{transform:translateY(30px)}
+
+/* locked finale note */
+.locked-note{
+  margin:56px auto 0;font-size:13px;color:var(--ink-soft);
+  font-style:italic;font-family:'Playfair Display',serif;font-size:16px;
+}
+
+footer{
+  padding:34px 24px;text-align:center;
+  font-size:10px;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--ink-soft);
+}
+
+@media (max-width:860px){
+  .chapters::before{left:14px}
+  .ch-node{left:14px}
+  .chapter{flex-direction:column;align-items:flex-start;gap:34px;padding-left:44px}
+  .chapter.r .ch-text{order:0;text-align:left}
+  .chapter.r .ch-body{margin-left:0}
+  .ch-text,.ch-photo{padding:0}
+  .ch-photo{width:100%}
+  .frame{width:min(100%,420px)}
+}
+</style>
+</head>
+<body>
+<canvas id="fireflies"></canvas>
+<div class="page">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow rv">одна история · без повода · просто так</div>
+    <h1 class="hero-title st" id="heroTitle">Наша <em>история</em></h1>
+    <p class="hero-sub rv rv-d2">Этот сайт я сделал для одного-единственного человека. Листай вниз — там ты <span class="dot">·</span></p>
+    <div class="scroll-hint rv rv-d3"><span>листай</span><span class="line"></span></div>
+  </header>
+
+  <!-- INTRO -->
+  <section class="intro">
+    <p class="rv">Привет. Если ты это читаешь — значит, всё получилось: я сделал сайт. Целый сайт. Просто потому что однажды понял: обычных слов в мессенджере мне уже мало.</p>
+    <p class="rv rv-d1">Здесь нет повода, даты и календаря. Здесь есть ты — и всё, что я о тебе думаю, когда ты не видишь.</p>
+    <div class="sig rv rv-d2">— твой.</div>
+    <div class="rule rv rv-d3"></div>
+  </section>
+
+  <!-- CHAPTERS -->
+  <section class="chapters">
+
+    <div class="chapter">
+      <div class="ch-node"></div>
+      <div class="ch-side ch-text rv">
+        <span class="ch-num">I</span>
+        <h3 class="ch-title">Пролог. <em>До меня</em></h3>
+        <p class="ch-body">Когда-то на свете появилась девочка, которая даже не подозревала, что много лет спустя кто-то будет смотреть на её детскую фотографию и улыбаться как дурак. Ты выросла — и стала моим самым любимым человеком на планете.</p>
+      </div>
+      <div class="ch-side ch-photo rv rv-d1">
+        <div>
+          <div class="frame"><img class="plx" src="photos/photo_5330093425983954214_y.jpg" alt="ты в детстве"></div>
+          <div class="ch-cap">начало всего</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter r">
+      <div class="ch-node"></div>
+      <div class="ch-side ch-text rv">
+        <span class="ch-num">II</span>
+        <h3 class="ch-title">Это <em>ты</em></h3>
+        <p class="ch-body">Та самая, которая может быть серьёзной и взрослой, а через секунду — смеяться так, что у меня сносит крышу. Ты настоящая. И рядом с тобой я тоже становлюсь настоящим.</p>
+      </div>
+      <div class="ch-side ch-photo rv rv-d1">
+        <div>
+          <div class="frame"><img class="plx" src="photos/photo_5330093425983954217_y.jpg" alt="ты"></div>
+          <div class="ch-cap">моя любимая версия тебя</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter">
+      <div class="ch-node"></div>
+      <div class="ch-side ch-text rv">
+        <span class="ch-num">III</span>
+        <h3 class="ch-title">Твой <em>свет</em></h3>
+        <p class="ch-body">Есть люди, которые заходят в комнату — и в комнате становится теплее. Ты из таких. Я сто раз видел, как ты идёшь куда-то по своим делам, и каждый раз ловил себя на мысли: «как мне повезло».</p>
+      </div>
+      <div class="ch-side ch-photo rv rv-d1">
+        <div>
+          <div class="frame"><img class="plx" src="photos/photo_5330093425983954211_y.jpg" alt="ты в тёплом свете"></div>
+          <div class="ch-cap">тёплый свет, тёплая ты</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter r">
+      <div class="ch-node"></div>
+      <div class="ch-side ch-text rv">
+        <span class="ch-num">IV</span>
+        <h3 class="ch-title">Выше <em>гор</em></h3>
+        <p class="ch-body">Горы, ветер, облака под ногами — и ты, которая смотрит вдаль. Я тогда понял простую вещь: красивые места — это просто места. Красивыми их делаешь ты. Куда угодно, лишь бы вместе.</p>
+      </div>
+      <div class="ch-side ch-photo rv rv-d1">
+        <div>
+          <div class="duo">
+            <div class="frame"><img class="plx" src="photos/photo_5330093425983954212_y.jpg" alt="ты в горах"></div>
+            <div class="frame"><img class="plx" src="photos/photo_5330093425983954216_y.jpg" alt="ты и горы"></div>
+          </div>
+          <div class="ch-cap">наши высоты</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter">
+      <div class="ch-node"></div>
+      <div class="ch-side ch-text rv">
+        <span class="ch-num">V</span>
+        <h3 class="ch-title">Каждый <em>день</em></h3>
+        <p class="ch-body">Знаешь, что самое ценное? Не праздники и не поездки. А обычные дни: ты у зеркала, ты с телефоном, ты рядом. Из таких дней, оказывается, и состоит счастье. Я проверил — точно состоит.</p>
+      </div>
+      <div class="ch-side ch-photo rv rv-d1">
+        <div>
+          <div class="duo">
+            <div class="frame"><img class="plx" src="photos/photo_5330093425983954213_y.jpg" alt="ты у зеркала"></div>
+            <div class="frame"><img class="plx" src="photos/photo_5330093425983954215_y.jpg" alt="твой обычный день"></div>
+          </div>
+          <div class="ch-cap">просто ты, просто день</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter r">
+      <div class="ch-node"></div>
+      <div class="ch-side ch-text rv">
+        <span class="ch-num">VI</span>
+        <h3 class="ch-title">Мы</h3>
+        <p class="ch-body">И вот итог всей этой истории: два человека, одна фотография и целая вселенная вокруг. Мы — это моя любимая глава. И, честно говоря, я не хочу, чтобы она когда-нибудь заканчивалась.</p>
+      </div>
+      <div class="ch-side ch-photo rv rv-d1">
+        <div>
+          <div class="frame wide"><img class="plx" src="photos/photo_5330093425983954222_y.jpg" alt="мы вдвоём"></div>
+          <div class="ch-cap">мы. вместе. всегда</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- INTERLUDE -->
+  <section class="interlude">
+    <blockquote class="rv">«Из всех историй на свете я бы тысячу раз выбрал ту, где есть ты»</blockquote>
+    <div class="who rv rv-d1">и это правда</div>
+  </section>
+
+  <!-- GAME -->
+  <section class="game-sec" id="game">
+    <div class="game-eyebrow rv">мини-игра · специально для тебя</div>
+    <h2 class="game-title rv rv-d1">Поймай <em>сердечко</em></h2>
+    <p class="game-sub rv rv-d2">Собери 10 сердец — и я открою тебе то, что спрятано в самом конце этой страницы. Они шустрые, но ты справишься.</p>
+    <div class="game-hud rv rv-d3">
+      <div>поймано<b id="score">0</b></div>
+      <div>осталось<b id="left">10</b></div>
+    </div>
+    <div id="gameBoard" class="rv rv-d3">
+      <canvas id="gameCanvas"></canvas>
+      <div class="game-start" id="gameStart">
+        <div class="game-tip">готова?</div>
+        <button class="btn" id="startBtn">играть</button>
+      </div>
+    </div>
+    <div class="locked-note" id="lockedNote">последняя страница откроется, когда соберёшь все сердца…</div>
+  </section>
+
+  <!-- FINALE -->
+  <section class="finale" id="finale" style="display:none">
+    <div class="f-eyebrow rv">последняя страница · только для тебя</div>
+    <h2 class="rv rv-d1">Я тебя <em>люблю</em></h2>
+    <div class="f-body">
+      <p class="rv rv-d1">Вот и всё — ты дошла до конца. А я всё это время думал, что написать тут такого, чтобы ты улыбнулась.</p>
+      <p class="rv rv-d2">Наверное, просто скажу как есть: ты — лучшее, что со мной случалось. Спасибо, что ты есть. Спасибо за каждый день рядом, за смех, за горы, за «доброе утро» и за «спокойной ночи».</p>
+      <p class="rv rv-d3">Повода у этого сайта нет. Ты и есть повод.</p>
+    </div>
+    <div class="f-photo rv rv-d2"><img src="photos/photo_5330093425983954222_y.jpg" alt="мы"></div>
+    <div class="f-sig rv rv-d3">твой. сегодня, завтра и вообще всегда.</div>
+    <div class="rv rv-d3"><span class="f-heart">♥</span></div>
+  </section>
+
+</div>
+<footer>сделано с любовью · в одном экземпляре · для одного человека</footer>
+
+<script>
+/* ============ stagger hero title ============ */
+(function(){
+  const t=document.getElementById('heroTitle');
+  const walk=n=>{
+    [...n.childNodes].forEach(c=>{
+      if(c.nodeType===3){
+        const frag=document.createDocumentFragment();
+        [...c.textContent].forEach((ch)=>{
+          const s=document.createElement('span');
+          s.textContent=ch===' '?'\u00A0':ch;
+          frag.appendChild(s);
+        });
+        n.replaceChild(frag,c);
+      }else if(c.nodeType===1) walk(c);
+    });
+  };
+  walk(t);
+  t.querySelectorAll('span').forEach((s,i)=>{s.style.animationDelay=(0.15+i*0.045)+'s'});
+})();
+
+/* ============ fireflies ============ */
+/* ============ floating hearts ============ */
+(function(){
+  const cv=document.getElementById('fireflies'),ctx=cv.getContext('2d');
+  let W,H,parts=[];
+  const resize=()=>{W=cv.width=innerWidth*devicePixelRatio;H=cv.height=innerHeight*devicePixelRatio;};
+  resize();addEventListener('resize',resize);
+  const N=Math.min(34,Math.floor(innerWidth/38));
+  const palette=[[179,36,43],[138,74,58],[179,36,43],[35,18,10]];
+  for(let i=0;i<N;i++)parts.push({
+    x:Math.random(),y:Math.random(),
+    s:(Math.random()*8+6.5)*devicePixelRatio,   // размер сердечка
+    a:Math.random()*Math.PI*2,
+    rot:(Math.random()-.5)*.7,                  // стартовый наклон
+    rotSp:(Math.random()-.5)*.004,              // скорость вращения
+    sp:(Math.random()*.00014+.00005),           // скорость всплытия
+    drift:(Math.random()-.5)*.00009,            // покачивание в стороны
+    base:Math.random()*.18+.11,                 // прозрачность
+    c:palette[Math.floor(Math.random()*palette.length)]
+  });
+  const heart=(x,y,s,rot)=>{
+    ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(s/30,s/30);
+    ctx.beginPath();
+    ctx.moveTo(0,10);
+    ctx.bezierCurveTo(-16,-4,-9,-16,0,-7);
+    ctx.bezierCurveTo(9,-16,16,-4,0,10);
+    ctx.fill();
+    ctx.restore();
+  };
+  const tick=()=>{
+    ctx.clearRect(0,0,W,H);
+    for(const p of parts){
+      p.a+=0.008;p.rot+=p.rotSp;p.y-=p.sp;p.x+=Math.sin(p.a)*p.drift*20;
+      if(p.y<-0.04){p.y=1.04;p.x=Math.random();}   // уплыло за верх — появляется снизу
+      const alpha=p.base+Math.sin(p.a)*0.05;       // лёгкое «дыхание» прозрачности
+      ctx.fillStyle=`rgba(${p.c[0]},${p.c[1]},${p.c[2]},${alpha})`;
+      heart(p.x*W,p.y*H,p.s,p.rot);
+    }
+    requestAnimationFrame(tick);
+  };
+  tick();
+})();
+
+/* ============ scroll reveal ============ */
+(function(){
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{threshold:.16});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+})();
+
+/* ============ image parallax ============ */
+(function(){
+  const imgs=[...document.querySelectorAll('.plx')];
+  const onScroll=()=>{
+    const vh=innerHeight;
+    for(const img of imgs){
+      const r=img.getBoundingClientRect();
+      if(r.bottom<0||r.top>vh)continue;
+      const p=(r.top+r.height/2-vh/2)/vh; /* -0.5..0.5 */
+      img.style.transform=`scale(1.12) translateY(${p*-26}px)`;
+    }
+  };
+  addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
+
+/* ============ catch-a-heart game ============ */
+(function(){
+  const board=document.getElementById('gameBoard');
+  const cv=document.getElementById('gameCanvas'),ctx=cv.getContext('2d');
+  const scoreEl=document.getElementById('score'),leftEl=document.getElementById('left');
+  const startOv=document.getElementById('gameStart');
+  const TARGET=10;
+  let W,H,running=false,hearts=[],pops=[],score=0,raf=null,spawnT=0;
+
+  const resize=()=>{
+    const r=board.getBoundingClientRect();
+    W=cv.width=r.width*devicePixelRatio;
+    H=cv.height=r.height*devicePixelRatio;
+  };
+  addEventListener('resize',resize);
+
+  const R=()=>devicePixelRatio;
+  function spawn(){
+    const size=(Math.random()*16+20)*R();
+    hearts.push({
+      x:Math.random()*(W-size*2)+size,
+      y:H+size,
+      vy:(Math.random()*.9+1.1)*R(),
+      sway:Math.random()*Math.PI*2,
+      swaySp:.02+Math.random()*.02,
+      amp:(Math.random()*26+12)*R(),
+      size,rot:(Math.random()-.5)*.5,
+      hue:Math.random()<.82?'#c77680':'#a76f77'
+    });
+  }
+  function drawHeart(x,y,s,rot,color,alpha){
+    ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(s/30,s/30);
+    ctx.globalAlpha=alpha;
+    ctx.beginPath();
+    ctx.moveTo(0,10);
+    ctx.bezierCurveTo(-16,-4,-9,-16,0,-7);
+    ctx.bezierCurveTo(9,-16,16,-4,0,10);
+    ctx.fillStyle=color;ctx.fill();
+    ctx.restore();ctx.globalAlpha=1;
+  }
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    spawnT--;
+    if(spawnT<=0&&hearts.length<7){spawn();spawnT=34+Math.random()*30;}
+    for(let i=hearts.length-1;i>=0;i--){
+      const h=hearts[i];
+      h.y-=h.vy;h.sway+=h.swaySp;
+      const hx=h.x+Math.sin(h.sway)*h.amp;
+      drawHeart(hx,h.y,h.size,h.rot,h.hue,1);
+      h.cx=hx;
+      if(h.y<-h.size*2)hearts.splice(i,1);
+    }
+    for(let i=pops.length-1;i>=0;i--){
+      const p=pops[i];p.t+=1;
+      const a=1-p.t/18;
+      if(a<=0){pops.splice(i,1);continue;}
+      drawHeart(p.x,p.y,p.size*(1+p.t*.14),p.rot,'#c77680',a*.8);
+      ctx.save();ctx.globalAlpha=a;
+      ctx.strokeStyle='rgba(240,237,231,.4)';ctx.lineWidth=1.2*R();
+      ctx.beginPath();ctx.arc(p.x,p.y,p.size*(1+p.t*.22),0,Math.PI*2);ctx.stroke();
+      ctx.restore();
+    }
+    if(running)raf=requestAnimationFrame(loop);
+  }
+  function end(win){
+    running=false;
+    if(raf)cancelAnimationFrame(raf);
+    if(win){
+      const finale=document.getElementById('finale');
+      finale.style.display='block';
+      document.getElementById('lockedNote').style.display='none';
+      startOv.classList.remove('hide');
+      startOv.querySelector('.game-tip').textContent='ты это сделала ♥';
+      const b=startOv.querySelector('.btn');
+      b.textContent='открыть последнюю страницу';
+      b.onclick=()=>{
+        finale.scrollIntoView({behavior:'smooth'});
+        finale.querySelectorAll('.rv').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),200+i*160));
+      };
+    }
+  }
+  cv.addEventListener('pointerdown',e=>{
+    if(!running)return;
+    const r=cv.getBoundingClientRect();
+    const x=(e.clientX-r.left)*R(),y=(e.clientY-r.top)*R();
+    for(let i=hearts.length-1;i>=0;i--){
+      const h=hearts[i],hx=h.cx??h.x;
+      const dx=x-hx,dy=y-h.y;
+      if(Math.hypot(dx,dy)<h.size*1.15){
+        pops.push({x:hx,y:h.y,size:h.size,rot:h.rot,t:0});
+        hearts.splice(i,1);
+        score++;
+        scoreEl.textContent=score;
+        leftEl.textContent=Math.max(0,TARGET-score);
+        if(score>=TARGET){end(true);}
+        break;
+      }
+    }
+  });
+  document.getElementById('startBtn').addEventListener('click',()=>{
+    resize();startOv.classList.add('hide');
+    hearts=[];pops=[];score=0;
+    scoreEl.textContent='0';leftEl.textContent=TARGET;
+    running=true;spawnT=0;loop();
+  });
+  resize();
+})();
+</script>
+</body>
+</html>
